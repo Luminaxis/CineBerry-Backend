@@ -13,7 +13,16 @@ connectDB();
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+
+// Define the allowed origin
+const allowedOrigin = 'https://cine-berry.vercel.app/';
+
+app.use(cors({
+  origin: allowedOrigin,
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true, // Allow cookies and other credentials from the client
+  optionsSuccessStatus: 204 // Some legacy browsers choke on 204
+}));
 
 app.use('/api/users', userRoutes);
 app.use('/api/videos', videoRoutes);
