@@ -15,7 +15,7 @@ const app = express();
 app.use(express.json());
 
 // Define the allowed origin
-const allowedOrigin = 'https://cine-berry.vercel.app/';
+const allowedOrigin = 'https://cine-berry.vercel.app';
 
 app.use(cors({
   origin: allowedOrigin,
