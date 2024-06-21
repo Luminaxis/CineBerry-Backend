@@ -15,7 +15,13 @@ const app = express();
 app.use(express.json());
 
 // Allow CORS from all origins
-app.use(cors());
+app.use(cors{
+  {
+  origin:["https://cine-berry.vercel.app"],
+  methods:["POST" , "GET"],
+  credentials: true
+  }
+})
 
 app.use('/api/users', userRoutes);
 app.use('/api/videos', videoRoutes);
