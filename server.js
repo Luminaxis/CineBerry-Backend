@@ -1,6 +1,6 @@
 import express from 'express';
-import dotenv from 'dotenv';
 import cors from 'cors';
+import dotenv from 'dotenv';
 import connectDB from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
 import videoRoutes from './routes/videoRoutes.js';
@@ -14,14 +14,15 @@ const app = express();
 
 app.use(express.json());
 
-// Allow CORS from all origins
-app.use(cors{
-  {
-  origin:["https://cine-berry.vercel.app"],
-  methods:["POST" , "GET"],
-  credentials: true
-  }
-})
+const allowedOrigin = 'https://cine-berry.vercel.app';
+
+const corsOptions = {
+  origin: allowedOrigin,
+  methods: ['GET', 'POST'], // Specify the allowed HTTP methods
+  credentials: true // Allow credentials such as cookies or authorization headers
+};
+
+app.use(cors(corsOptions));
 
 app.use('/api/users', userRoutes);
 app.use('/api/videos', videoRoutes);
