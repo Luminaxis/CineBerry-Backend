@@ -16,7 +16,7 @@ app.use(express.json());
 
 app.use(cors(
     {
-        origin: ["https://cine-berry.vercel.app"],
+        origin: ["https://cine-berry.vercel.app/"],
         methods: ["POST", "GET"],
         credentials: true
     }
