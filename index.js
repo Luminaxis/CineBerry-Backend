@@ -5,6 +5,8 @@ import connectDB from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
 import videoRoutes from './routes/videoRoutes.js';
 import path from 'path';
+import fs from 'fs-extra';
+
 
 dotenv.config();
 
@@ -27,9 +29,22 @@ app.use(cors(corsOptions));
 app.use('/api/users', userRoutes);
 app.use('/api/videos', videoRoutes);
 
-// Serve static files from the 'uploads' directory
+// Serve static files from the 'uploads' directory with logging
 const __dirname = path.resolve();
-app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
+app.use('/uploads', (req, res, next) => {
+  const filePath = path.join(__dirname, '/uploads', req.path);
+  console.log(`Attempting to serve file: ${filePath}`);
+  
+  // Check if the file exists
+  fs.access(filePath, fs.constants.F_OK, (err) => {
+    if (err) {
+      console.error(`File not found: ${filePath}`);
+      res.status(404).json({ message: 'File not found' });
+    } else {
+      next();
+    }
+  });
+}, express.static(path.join(__dirname, '/uploads')));
 
 // Serve frontend static files in production
 if (process.env.NODE_ENV === 'production') {
@@ -43,7 +58,6 @@ if (process.env.NODE_ENV === 'production') {
     res.send('API is running....');
   });
 }
-
 
 // Error handling
 app.use((req, res, next) => {
