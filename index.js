@@ -1,6 +1,6 @@
 import express from 'express';
-import cors from 'cors';
 import dotenv from 'dotenv';
+import cors from 'cors';
 import connectDB from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
 import videoRoutes from './routes/videoRoutes.js';
@@ -14,13 +14,14 @@ const app = express();
 
 app.use(express.json());
 
-app.use(cors(
-    {
-        origin: ["https://cine-berry.vercel.app/"],
-        methods: ["POST", "GET"],
-        credentials: true
-    }
-));
+const corsOptions = {
+  origin: 'https://cine-berry.vercel.app',
+  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+  credentials: true,
+  optionsSuccessStatus: 204,
+};
+
+app.use(cors(corsOptions));
 
 app.use('/api/users', userRoutes);
 app.use('/api/videos', videoRoutes);
@@ -39,6 +40,10 @@ if (process.env.NODE_ENV === 'production') {
     res.send('API is running....');
   });
 }
+
+app.use((req, res, next) => {
+  res.status(404).json({ message: 'Not Found' });
+});
 
 const PORT = process.env.PORT || 5000;
 
