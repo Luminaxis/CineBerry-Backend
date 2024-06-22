@@ -18,7 +18,6 @@ const corsOptions = {
   origin: 'https://cine-berry.vercel.app',
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
   credentials: true,
-  optionsSuccessStatus: 204,
 };
 
 app.use(cors(corsOptions));
@@ -41,6 +40,7 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
+// 404 Error Handling
 app.use((req, res, next) => {
   res.status(404).json({ message: 'Not Found' });
 });
