@@ -1,6 +1,6 @@
 import multer from 'multer';
 import path from 'path';
-import fs from 'fs';
+import fs from 'fs-extra';
 
 const createDirectories = (dir) => {
   if (!fs.existsSync(dir)){

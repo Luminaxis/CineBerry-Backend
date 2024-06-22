@@ -5,7 +5,7 @@ import connectDB from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
 import videoRoutes from './routes/videoRoutes.js';
 import path from 'path';
-import fs from 'fs'; // Ensure you are importing fs
+import fs from 'fs-extra'; // Ensure you are importing fs
 
 dotenv.config();
 
