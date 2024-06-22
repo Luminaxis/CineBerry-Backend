@@ -16,13 +16,12 @@ const app = express();
 app.use(express.json());
 
 // CORS configuration
-app.use(cors(
-  {
-      origin: ["https://cine-berry.vercel.app"],
-      methods: ["POST", "GET"],
-      credentials: true
-  }
-));
+const corsOptions = {
+  origin: 'https://cine-berry.vercel.app',
+  methods: ['POST', 'GET'],
+  credentials: true,
+};
+app.use(cors(corsOptions));
 
 // Routes
 app.use('/api/users', userRoutes);
