@@ -12,22 +12,27 @@ connectDB();
 
 const app = express();
 
+// Middleware
 app.use(express.json());
 
+// CORS configuration
 const corsOptions = {
-  origin: 'https://cine-berry.vercel.app',
-  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
-  credentials: true,
+  origin: 'https://cine-berry.vercel.app', // Allow requests from this origin
+  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'], // Allow these HTTP methods
+  credentials: true, // Allow cookies and authorization headers
 };
 
 app.use(cors(corsOptions));
 
+// Routes
 app.use('/api/users', userRoutes);
 app.use('/api/videos', videoRoutes);
 
+// Serve static files from the 'uploads' directory
 const __dirname = path.resolve();
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
+// Serve frontend static files in production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, 'frontend/build')));
 
@@ -40,12 +45,12 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-// 404 Error Handling
+// Error handling
 app.use((req, res, next) => {
   res.status(404).json({ message: 'Not Found' });
 });
 
-// Global Error Handler
+// Global error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: 'Server Error' });
