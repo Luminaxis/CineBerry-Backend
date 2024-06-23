@@ -1,7 +1,8 @@
-// index.js
+// index.js or app.js where your backend server is configured
+
 import express from 'express';
-import dotenv from 'dotenv';
 import cors from 'cors';
+import dotenv from 'dotenv';
 import connectDB from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
 import videoRoutes from './routes/videoRoutes.js';
@@ -9,18 +10,6 @@ import path from 'path';
 
 dotenv.config();
 
-// Verify essential environment variables
-if (!process.env.JWT_SECRET) {
-  console.error('JWT_SECRET is not defined in the environment variables');
-  process.exit(1); // Exit process with failure
-}
-
-if (!process.env.MONGO_URI) {
-  console.error('MONGO_URI is not defined in the environment variables');
-  process.exit(1); // Exit process with failure
-}
-
-// Connect to Database
 connectDB();
 
 const app = express();
@@ -30,10 +19,12 @@ app.use(express.json());
 
 // CORS configuration
 const corsOptions = {
-  origin: 'https://cine-berry.vercel.app',
-  methods: ['POST', 'GET', 'PUT', 'DELETE', 'OPTIONS'],
-  credentials: true,
+  origin: 'https://cine-berry.vercel.app', // Replace with your frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'], // Add headers that your frontend may send
+  credentials: true, // Allow cookies and authorization headers to be sent
 };
+
 app.use(cors(corsOptions));
 
 // Routes
