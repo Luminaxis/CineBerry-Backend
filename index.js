@@ -5,7 +5,6 @@ import connectDB from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
 import videoRoutes from './routes/videoRoutes.js';
 import path from 'path';
-import fs from 'fs-extra'; // Ensure you are importing fs
 
 dotenv.config();
 
@@ -30,8 +29,7 @@ app.use('/api/videos', videoRoutes);
 
 // Serve static files from the 'uploads' directory
 const __dirname = path.resolve();
-const uploadsPath = path.join(__dirname, '/uploads');
-app.use('/uploads', express.static(uploadsPath));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Serve frontend static files in production
 if (process.env.NODE_ENV === 'production') {
@@ -53,10 +51,11 @@ app.use((req, res, next) => {
 
 // Global error handler
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: 'Server Error' });
+  console.error('Error stack:', err.stack);
+  console.error('Error message:', err.message);
+  res.status(500).json({ message: 'Server Error', error: err.message });
 });
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`));
