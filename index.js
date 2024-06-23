@@ -1,3 +1,4 @@
+// index.js
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -8,6 +9,18 @@ import path from 'path';
 
 dotenv.config();
 
+// Verify essential environment variables
+if (!process.env.JWT_SECRET) {
+  console.error('JWT_SECRET is not defined in the environment variables');
+  process.exit(1); // Exit process with failure
+}
+
+if (!process.env.MONGO_URI) {
+  console.error('MONGO_URI is not defined in the environment variables');
+  process.exit(1); // Exit process with failure
+}
+
+// Connect to Database
 connectDB();
 
 const app = express();
@@ -18,7 +31,7 @@ app.use(express.json());
 // CORS configuration
 const corsOptions = {
   origin: 'https://cine-berry.vercel.app',
-  methods: ['POST', 'GET'],
+  methods: ['POST', 'GET', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true,
 };
 app.use(cors(corsOptions));
