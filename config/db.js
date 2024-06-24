@@ -1,19 +1,18 @@
-// config/db.js
 import mongoose from 'mongoose';
 
+const MONGO_URI = process.env.MONGO_URI;
+
 const connectDB = async () => {
-  if (!process.env.MONGO_URI) {
-    console.error('MONGO_URI is not defined in the environment variables');
-    throw new Error('MONGO_URI is not defined');
-  }
-
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URI);
+    await mongoose.connect(MONGO_URI, {
+      // Remove useNewUrlParser and useUnifiedTopology
+      // These are deprecated and have no effect in modern MongoDB drivers
+    });
 
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
+    console.log('MongoDB connected');
   } catch (error) {
-    console.error(`Error connecting to MongoDB: ${error.message}`);
-    process.exit(1); // Exit process with failure
+    console.error('Error connecting to MongoDB:', error.message);
+    process.exit(1); // Exit with failure
   }
 };
 
