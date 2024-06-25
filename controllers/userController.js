@@ -125,25 +125,34 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     }
 
     if (req.file) {
-      const result = await cloudinary.uploader.upload(req.file.path, {
-        folder: 'avatars',
-      });
-      user.avatar = result.secure_url;
+      try {
+        const result = await cloudinary.uploader.upload(req.file.path);
+        user.avatar = result.secure_url;
+      } catch (error) {
+        console.error('Error uploading avatar to Cloudinary:', error);
+        res.status(500).json({ message: 'Error uploading avatar' });
+        return;
+      }
     }
 
-    const updatedUser = await user.save();
-
-    res.json({
-      _id: updatedUser._id,
-      username: updatedUser.username,
-      email: updatedUser.email,
-      avatar: updatedUser.avatar,
-    });
+    try {
+      const updatedUser = await user.save();
+      res.json({
+        _id: updatedUser._id,
+        username: updatedUser.username,
+        email: updatedUser.email,
+        avatar: updatedUser.avatar,
+      });
+    } catch (error) {
+      console.error('Error saving user profile:', error);
+      res.status(500).json({ message: 'Error saving user profile' });
+    }
   } else {
-    res.status(404);
-    throw new Error('User not found');
+    res.status(404).json({ message: 'User not found' });
   }
 });
+
+
 const logoutUser = asyncHandler(async (req, res) => {
   // Clear token on client-side (frontend)
   res.clearCookie('token'); // Example for clearing cookie, adjust as per your frontend implementation
