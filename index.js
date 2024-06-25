@@ -18,7 +18,7 @@ app.use(express.json());
 // CORS configuration
 const corsOptions = {
   origin: 'https://cine-berry.vercel.app',
-  methods: ['POST', 'GET'],
+  methods: ['POST', 'GET' , 'PUT'],
   credentials: true,
 };
 app.use(cors(corsOptions));
