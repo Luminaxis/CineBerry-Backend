@@ -34,8 +34,8 @@ app.use('/uploads', express.static(uploadsPath));
 
 // Serve frontend static files in production
 if (process.env.NODE_ENV === 'production') {
-  // Serve static files from the 'frontend-dist' directory
-  const frontendPath = path.join(__dirname, 'frontend-dist');
+  // Serve static files from the frontend 'dist' directory
+  const frontendPath = path.join(__dirname, '..', 'frontend', 'dist');
   app.use(express.static(frontendPath));
 
   // Serve 'index.html' for any other routes
