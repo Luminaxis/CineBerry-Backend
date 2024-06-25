@@ -4,6 +4,7 @@ import cors from 'cors';
 import connectDB from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
 import videoRoutes from './routes/videoRoutes.js';
+import path from 'path';
 
 dotenv.config();
 
@@ -27,7 +28,6 @@ app.use('/api/users', userRoutes);
 app.use('/api/videos', videoRoutes);
 
 // Serve static files from the 'uploads' directory
-const path = require('path');
 const __dirname = path.resolve();
 const uploadsPath = path.join(__dirname, 'uploads');
 app.use('/uploads', express.static(uploadsPath));
