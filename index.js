@@ -5,7 +5,6 @@ import connectDB from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
 import videoRoutes from './routes/videoRoutes.js';
 import path from 'path';
-import fs from 'fs-extra'; // Ensure you are importing fs
 
 dotenv.config();
 
@@ -30,23 +29,27 @@ app.use('/api/videos', videoRoutes);
 
 // Serve static files from the 'uploads' directory
 const __dirname = path.resolve();
-const uploadsPath = path.join(__dirname, '/uploads');
+const uploadsPath = path.join(__dirname, 'uploads');
 app.use('/uploads', express.static(uploadsPath));
 
 // Serve frontend static files in production
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, 'frontend/build')));
+  // Serve static files from the 'frontend/build' directory
+  const frontendPath = path.join(__dirname, 'frontend', 'build');
+  app.use(express.static(frontendPath));
 
-  app.get('*', (req, res) =>
-    res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'))
-  );
+  // Serve 'index.html' for any other routes
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(frontendPath, 'index.html'));
+  });
 } else {
+  // Default route for non-production environment
   app.get('/', (req, res) => {
     res.send('API is running....');
   });
 }
 
-// Error handling
+// Error handling for 404 Not Found
 app.use((req, res, next) => {
   res.status(404).json({ message: 'Not Found' });
 });
@@ -59,4 +62,6 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+});
