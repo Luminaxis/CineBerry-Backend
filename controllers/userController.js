@@ -2,6 +2,7 @@ import asyncHandler from 'express-async-handler';
 import User from '../models/User.js';
 import generateToken from '../utils/generateToken.js';
 import jwt from 'jsonwebtoken';
+import cloudinary from '../config/cloudinary.js';
 
 // @desc    Register a new user
 // @route   POST /api/users
@@ -124,7 +125,10 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     }
 
     if (req.file) {
-      user.avatar = `/uploads/avatars/${req.file.filename}`;
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: 'avatars',
+      });
+      user.avatar = result.secure_url;
     }
 
     const updatedUser = await user.save();
@@ -140,7 +144,6 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     throw new Error('User not found');
   }
 });
-
 const logoutUser = asyncHandler(async (req, res) => {
   // Clear token on client-side (frontend)
   res.clearCookie('token'); // Example for clearing cookie, adjust as per your frontend implementation

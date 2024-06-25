@@ -1,11 +1,11 @@
 import express from 'express';
-import { protect } from '../middleware/authMiddleware.js';
 import {
   uploadVideo,
   getAllVideos,
   getVideosByUser,
   likeVideo,
 } from '../controllers/videoController.js';
+import { protect } from '../middleware/authMiddleware.js';
 import upload from '../middleware/uploadMiddleware.js';
 
 const router = express.Router();

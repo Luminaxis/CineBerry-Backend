@@ -18,7 +18,7 @@ app.use(express.json());
 // CORS configuration
 const corsOptions = {
   origin: 'https://cine-berry.vercel.app',
-  methods: ['POST', 'GET' , 'PUT'],
+  methods: ['POST', 'GET', 'PUT'],
   credentials: true,
 };
 app.use(cors(corsOptions));
@@ -26,11 +26,6 @@ app.use(cors(corsOptions));
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/videos', videoRoutes);
-
-// Serve static files from the 'uploads' directory
-const __dirname = path.resolve();
-const uploadsPath = path.join(__dirname, 'uploads');
-app.use('/uploads', express.static(uploadsPath));
 
 // Error handling for 404 Not Found
 app.use((req, res, next) => {

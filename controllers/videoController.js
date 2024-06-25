@@ -1,22 +1,28 @@
 import asyncHandler from 'express-async-handler';
 import Video from '../models/Video.js';
+import cloudinary from '../config/cloudinary.js';
 
 // @desc    Upload a video
 // @route   POST /api/videos
 // @access  Private
 const uploadVideo = asyncHandler(async (req, res) => {
-    const { title } = req.body;
-    const videoPath = `/uploads/videos/${req.file.filename}`;
+  const { title } = req.body;
 
-    const video = new Video({
-        user: req.user._id,
-        title,
-        videoPath,
-    });
+  const result = await cloudinary.uploader.upload(req.file.path, {
+    resource_type: 'video',
+    folder: 'videos',
+  });
 
-    const createdVideo = await video.save();
-    res.status(201).json(createdVideo);
+  const video = new Video({
+    user: req.user._id,
+    title,
+    videoPath: result.secure_url,
+  });
+
+  const createdVideo = await video.save();
+  res.status(201).json(createdVideo);
 });
+
 
 // @desc    Get all videos
 // @route   GET /api/videos
